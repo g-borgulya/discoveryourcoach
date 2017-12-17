@@ -1,0 +1,9 @@
+FROM  node:8.1
+EXPOSE 5000
+ARG NODE_ENV
+
+ENV NODE_DEV /usr/src/app-dev
+RUN mkdir -p $NODE_DEV
+WORKDIR $NODE_DEV/backend
+RUN yarn
+CMD ["yarn", "start"]

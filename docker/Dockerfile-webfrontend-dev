@@ -1,0 +1,13 @@
+FROM  node:8.1
+EXPOSE 3000 3001
+
+RUN npm install -g yarn
+
+# Uses the volume that contains the current project files
+# to support hot reloading on changes in the local filesystem
+ENV NODE_DEV /usr/src/app-dev
+RUN mkdir -p $NODE_DEV
+WORKDIR $NODE_DEV/webfrontend
+RUN yarn
+
+CMD ["yarn", "start"]

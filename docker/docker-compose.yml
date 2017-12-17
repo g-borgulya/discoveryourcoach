@@ -1,0 +1,79 @@
+version: "3"
+services:
+  dyc-nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-nginx-${NODE_ENV}
+      args:
+        - NODE_ENV=${NODE_ENV}
+    logging:
+      driver: none
+    restart: ${RESTART}
+    ports:
+      - "${WEBFRONTEND_PORT}:10000"
+    depends_on:
+      - dyc-webfrontend
+      - dyc-admin
+      - dyc-backend0
+    volumes:
+      - ..:/usr/src/app-dev
+
+  dyc-webfrontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-webfrontend-${NODE_ENV}
+      args:
+        - NODE_ENV=${NODE_ENV}
+    restart: "no"
+    ports:
+      - "3000"
+      - "3001"
+    depends_on:
+      - dyc-backend0
+    volumes:
+      - ..:/usr/src/app-dev
+
+  dyc-admin:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-admin-${NODE_ENV}
+      args:
+        - NODE_ENV=${NODE_ENV}
+    restart: "no"
+    ports:
+      - "3000"
+      - "3001"
+    depends_on:
+      - dyc-backend0
+    volumes:
+      - ..:/usr/src/app-dev
+
+  dyc-backend0:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-backend-${NODE_ENV}
+      args:
+        - NODE_ENV=${NODE_ENV}
+    restart: ${RESTART}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    ports:
+      - "5000"
+    depends_on:
+      - dyc-mongo
+    volumes:
+      - ..:/usr/src/app-dev
+
+  dyc-mongo:
+    image: mongo:3.4
+    restart: always
+    environment:
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - "27017"
+    command: mongod --logpath=/dev/null
+    volumes:
+      - dyc-mongodata:/data/db
+
+volumes:
+  dyc-mongodata: {}

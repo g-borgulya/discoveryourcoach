@@ -1,0 +1,11 @@
+FROM  node:8.1
+
+RUN npm install -g yarn
+
+# Uses the volume that contains the current project files
+# to share built code with nginx
+ENV NODE_DEV /usr/src/app-dev
+RUN mkdir -p $NODE_DEV
+WORKDIR $NODE_DEV/admin
+RUN yarn
+CMD ["yarn", "build"]

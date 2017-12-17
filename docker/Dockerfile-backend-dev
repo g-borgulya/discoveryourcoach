@@ -1,0 +1,11 @@
+FROM  node:8.1
+EXPOSE 5000
+
+# Uses the volume that contains the current project files
+# to support hot reloading on changes in the local filesystem
+ENV NODE_DEV /usr/src/app-dev
+RUN mkdir -p $NODE_DEV
+WORKDIR $NODE_DEV/backend
+RUN yarn
+
+CMD ["yarn", "dev"]
