@@ -1,0 +1,12 @@
+admin/public/dist
+admin/public/index.html
+admin/public/sitemap.xml
+admin/node_modules
+backend/node_modules
+backend/build
+webfrontend/public/dist
+webfrontend/public/sitemap.xml
+webfrontend/node_modules
+node_modules
+npm-debug.log
+yarn-error.log
